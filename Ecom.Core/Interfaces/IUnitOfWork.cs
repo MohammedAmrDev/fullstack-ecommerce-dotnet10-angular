@@ -2,8 +2,10 @@
 {
 	public interface IUnitOfWork
 	{
-		public ICategoryRepository Categories { get; }
-		public IProductRepository Products { get; }
-		public IPhotoRepository Photos { get; }
+		ICategoryRepository Categories { get; }
+		IProductRepository Products { get; }
+		IPhotoRepository Photos { get; }
+
+		Task<int> SaveChangesAsync();
 	}
 }

@@ -9,9 +9,9 @@ namespace Ecom.Infrastructure.Data.Configurations
 		public void Configure(EntityTypeBuilder<Category> builder)
 		{
 			builder.HasKey(c => c.Id);
-			builder.Property(c => c.Name)
-				.IsRequired()
-				.HasMaxLength(30);
+			builder.Property(c => c.Name).HasMaxLength(30);
+			builder.Property(c => c.Description).HasMaxLength(80);
+
 			builder.HasData([
 				new Category { Id = 1, Name = "Electronics", Description = "Electronic devices and gadgets" },
 				new Category { Id = 2, Name = "Accessories", Description = "Headphones, chargers and covers" },

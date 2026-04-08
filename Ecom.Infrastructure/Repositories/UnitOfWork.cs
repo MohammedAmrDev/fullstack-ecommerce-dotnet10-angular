@@ -1,7 +1,7 @@
 ﻿using Ecom.Core.Interfaces;
 using Ecom.Infrastructure.Data;
 
-namespace Ecom.Infrastructure.Repository
+namespace Ecom.Infrastructure.Repositories
 {
 	public class UnitOfWork : IUnitOfWork
 	{
@@ -19,6 +19,11 @@ namespace Ecom.Infrastructure.Repository
 			Categories = new CategoryRepository(_context);
 			Products = new ProductRepository(_context);
 			Photos = new PhotoRepository(_context);
+		}
+
+		public async Task<int> SaveChangesAsync()
+		{
+			return await _context.SaveChangesAsync();
 		}
 	}
 }

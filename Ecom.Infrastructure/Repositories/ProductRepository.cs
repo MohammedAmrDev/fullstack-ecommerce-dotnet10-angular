@@ -2,7 +2,7 @@
 using Ecom.Core.Interfaces;
 using Ecom.Infrastructure.Data;
 
-namespace Ecom.Infrastructure.Repository
+namespace Ecom.Infrastructure.Repositories
 {
 	public class ProductRepository : GenericRepository<Product, int>, IProductRepository
 	{

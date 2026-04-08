@@ -3,7 +3,7 @@ using Ecom.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace Ecom.Infrastructure.Repository
+namespace Ecom.Infrastructure.Repositories
 {
 	public class GenericRepository<TEntity, TKey> : IGenericRepository<TEntity, TKey> where TEntity : class
 	{
@@ -13,21 +13,8 @@ namespace Ecom.Infrastructure.Repository
 			_context = context;
 		}
 
-		public async Task AddAsync(TEntity entity)
-		{
-			await _context.Set<TEntity>().AddAsync(entity);
-			await _context.SaveChangesAsync();
-		}
-
-		public async Task DeleteAsync(TKey id)
-		{
-			TEntity? entity = await _context.Set<TEntity>().FindAsync(id);
-			if (entity != null)
-				_context.Set<TEntity>().Remove(entity);
-			await _context.SaveChangesAsync();
-		}
-
-		public async Task<IReadOnlyList<TEntity>> GetAllAsync() => 
+		#region Get_All_Data
+		public async Task<IReadOnlyList<TEntity>> GetAllAsync() =>
 			await _context.Set<TEntity>().AsNoTracking().ToListAsync();
 
 		public async Task<IReadOnlyList<TEntity>> GetAllAsync(params Expression<Func<TEntity, object>>[] includes)
@@ -37,7 +24,9 @@ namespace Ecom.Infrastructure.Repository
 				entities = entities.Include(include);
 			return await entities.ToListAsync();
 		}
+		#endregion
 
+		#region Get_Data_By_Id
 		public async Task<TEntity?> GetByIdAsync(TKey id)
 		{
 			return await _context.Set<TEntity>().FindAsync(id);
@@ -50,11 +39,23 @@ namespace Ecom.Infrastructure.Repository
 				entities = entities.Include(include);
 			return await entities.FirstOrDefaultAsync(e => EF.Property<TKey>(e, "Id")!.Equals(id));
 		}
+		#endregion
 
-		public Task UpdateAsync(TEntity entity)
+		#region Add,Update,Delete
+		public async Task AddAsync(TEntity entity)
+		{
+			await _context.Set<TEntity>().AddAsync(entity);
+		}
+
+		public void Update(TEntity entity)
 		{
 			_context.Set<TEntity>().Update(entity);
-			return _context.SaveChangesAsync();
 		}
+
+		public void Delete(TEntity entity)
+		{
+			_context.Set<TEntity>().Remove(entity);
+		}
+		#endregion
 	}
 }
